@@ -18,7 +18,7 @@
  * all licensed copies of the Software.
  */
 
-namespace District5\MondocBuilder\QueryTypes;
+namespace District5\MondocBuilder;
 
 use DateTime;
 use MongoDB\BSON\UTCDateTime;
@@ -26,7 +26,7 @@ use MongoDB\BSON\UTCDateTime;
 /**
  * Class Helper.
  *
- * @package District5\MondocBuilder\QueryTypes
+ * @package District5\MondocBuilder
  */
 class Helper
 {
@@ -34,6 +34,8 @@ class Helper
      * Convert a PHP DateTime to a Mongo UTCDateTime. It doesn't matter which you pass in.
      *
      * @param DateTime|UTCDateTime $provided
+     *
+     * @return null|UTCDateTime
      */
     public static function phpDateToMongoDateTime($provided): ?UTCDateTime
     {

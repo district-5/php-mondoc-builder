@@ -1,4 +1,23 @@
 <?php
+
+/**
+ * District5 - MondocBuilder
+ *
+ *  - A MongoDB query building library.
+ *
+ * @copyright District5
+ *
+ * @author District5
+ * @link https://www.district5.co.uk
+ *
+ * @license This software and associated documentation (the "Software") may not be
+ * used, copied, modified, distributed, published or licensed to any 3rd party
+ * without the written permission of District5 or its author.
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all licensed copies of the Software.
+ */
+
 namespace District5Tests\MondocBuilderTests;
 
 use District5\MondocBuilder\QueryBuilder;
@@ -6,6 +25,7 @@ use District5\MondocBuilder\QueryTypes\AndOperator;
 use District5\MondocBuilder\QueryTypes\GeospatialPointNear;
 use District5\MondocBuilder\QueryTypes\GeospatialPointNearSphere;
 use District5\MondocBuilder\QueryTypes\HasAllValues;
+use District5\MondocBuilder\QueryTypes\OrOperator;
 use District5\MondocBuilder\QueryTypes\SizeOfValue;
 use District5\MondocBuilder\QueryTypes\ValueEqualTo;
 use District5\MondocBuilder\QueryTypes\ValueGreaterThan;
@@ -15,12 +35,14 @@ use District5\MondocBuilder\QueryTypes\ValueLessThan;
 use District5\MondocBuilder\QueryTypes\ValueLessThanOrEqualTo;
 use District5\MondocBuilder\QueryTypes\ValueNotEqualTo;
 use District5\MondocBuilder\QueryTypes\ValueNotInValues;
-use District5\MondocBuilder\QueryTypes\OrOperator;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class QueryBuilderTest
+ * Class QueryBuilderTest.
+ *
  * @package District5\MondocBuilderTests
+ *
+ * @internal
  */
 class QueryBuilderTest extends TestCase
 {
@@ -308,11 +330,11 @@ class QueryBuilderTest extends TestCase
         $customOne = [
             'name' => 'Jane',
             'num' => 123,
-            'town' => 'Joetown, USA'
+            'town' => 'Joetown, USA',
         ];
         $customTwo = [
             'name' => 'Jane',
-            'num' => 456
+            'num' => 456,
         ];
         $builder = QueryBuilder::get();
 
