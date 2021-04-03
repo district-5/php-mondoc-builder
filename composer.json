@@ -1,0 +1,44 @@
+{
+  "name": "district5/mondoc-builder",
+  "type": "library",
+  "description": "A simple to use object orientated library to generate queries to use in MongoDB",
+  "keywords": [
+    "district5",
+    "mongo",
+    "mongodb",
+    "query",
+    "builder",
+    "database",
+    "db"
+  ],
+  "homepage": "https://github.com/district-5/php-mondoc-builder",
+  "license": "Proprietary",
+  "authors": [
+    {
+      "name": "District5",
+      "email": "hello@district5.co.uk"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "District5\\MondocBuilder\\": "src/MondocBuilder/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "District5Tests\\MondocBuilderTests\\": "tests/"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "require": {
+    "php": ">=7.1",
+    "mongodb/mongodb": "^1.8",
+    "ext-mongodb": "*"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^2.16",
+    "phpunit/phpunit": "^7.5"
+  }
+}

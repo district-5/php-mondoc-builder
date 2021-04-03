@@ -1,0 +1,8 @@
+# All dot files
+.*
+# Keep these dot files
+!.gitignore
+!.php_cs
+# Vendor and composer
+vendor/
+composer.lock
