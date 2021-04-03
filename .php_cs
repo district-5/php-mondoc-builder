@@ -44,7 +44,8 @@ return $cs->setRiskyAllowed(
         'no_empty_phpdoc' => false,
         'lowercase_static_reference' => true,
         'phpdoc_no_package' => false,
-        'no_superfluous_phpdoc_tags' => false
+        'no_superfluous_phpdoc_tags' => false,
+        'trailing_comma_in_multiline_array' => false
     ]
 )->setFinder(
     $finder

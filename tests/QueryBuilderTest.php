@@ -330,11 +330,11 @@ class QueryBuilderTest extends TestCase
         $customOne = [
             'name' => 'Jane',
             'num' => 123,
-            'town' => 'Joetown, USA',
+            'town' => 'Joetown, USA'
         ];
         $customTwo = [
             'name' => 'Jane',
-            'num' => 456,
+            'num' => 456
         ];
         $builder = QueryBuilder::get();
 
