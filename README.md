@@ -17,7 +17,7 @@ In your `composer.json` file include:
     ],
     "require": {
         "php": ">=7.1",
-        "district5/mondoc-builder": ">=0.0.1",
+        "district5/mondoc-builder": ">=1.0.0",
         "mongodb/mongodb": "^1.5",
         "ext-mongodb": "*"
     },
