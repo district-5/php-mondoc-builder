@@ -11,13 +11,18 @@ In your `composer.json` file include:
 {
     "repositories":[
         {
-            "type": "vcs",
-            "url": "git@github.com:district-5/php-mondoc-builder.git"
+          "type": "vcs",
+          "url": "git@github.com:district-5/php-mondoc-builder.git"
+        },
+        {
+          "type": "vcs",
+          "url": "git@github.com:district-5/php-date.git"
         }
     ],
     "require": {
         "php": ">=7.1",
         "district5/mondoc-builder": ">=1.0.0",
+        "district5/date": ">=2.0.0",
         "mongodb/mongodb": "^1.5",
         "ext-mongodb": "*"
     },
@@ -38,10 +43,6 @@ In your `composer.json` file include:
 * Run PHPUnit
   ```
   $ ./vendor/bin/phpunit
-  ```
-* Run PHP-CS-Fixer (automatically fix PHP code style issues)
-  ```
-  $ ./vendor/bin/php-cs-fixer fix
   ```
 
 ### Building a query...
