@@ -33,7 +33,7 @@ class SizeOfValue extends AbstractQueryType
      * Adds a '$size' check to a query.
      *
      * @param string $key
-     * @param int    $int
+     * @param int $int
      *
      * @return $this
      */

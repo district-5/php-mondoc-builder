@@ -45,6 +45,17 @@ class QueryBuilder implements AbstractExportableArray
     private $options;
 
     /**
+     * Get a new instance of the QueryBuilder.
+     *
+     * @return QueryBuilder
+     * @noinspection PhpUnused
+     */
+    public static function get(): QueryBuilder
+    {
+        return new self();
+    }
+
+    /**
      * Add a query part to this builder instance.
      *
      * @param AbstractQueryType $part
@@ -93,28 +104,6 @@ class QueryBuilder implements AbstractExportableArray
     }
 
     /**
-     * Get a new instance of the QueryBuilder.
-     *
-     * @return QueryBuilder
-     */
-    public static function get(): QueryBuilder
-    {
-        return new self();
-    }
-
-    /**
-     * @param QueryOptions $options
-     *
-     * @return $this
-     */
-    public function setOptions(QueryOptions $options): QueryBuilder
-    {
-        $this->options = $options;
-
-        return $this;
-    }
-
-    /**
      * Get the options.
      *
      * @return QueryOptions
@@ -126,6 +115,19 @@ class QueryBuilder implements AbstractExportableArray
         }
 
         return $this->options;
+    }
+
+    /**
+     * @param QueryOptions $options
+     *
+     * @return $this
+     * @noinspection PhpUnused
+     */
+    public function setOptions(QueryOptions $options): QueryBuilder
+    {
+        $this->options = $options;
+
+        return $this;
     }
 
     /**

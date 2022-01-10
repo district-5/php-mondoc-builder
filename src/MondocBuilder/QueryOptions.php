@@ -98,7 +98,7 @@ class QueryOptions implements AbstractExportableArray
 
     /**
      * @param string $field
-     * @param int    $direction
+     * @param int $direction
      *
      * @return QueryOptions
      * @noinspection PhpUnused

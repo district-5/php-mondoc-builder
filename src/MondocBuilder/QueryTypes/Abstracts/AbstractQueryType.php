@@ -37,10 +37,9 @@ abstract class AbstractQueryType implements AbstractExportableArray
     /**
      * Get an instance of this object from a static request.
      *
-     * @example \District5\MondocBuilder\QueryTypes\ValueEqualTo::get();
-     *
      * @return $this
      * @noinspection PhpMissingReturnTypeInspection
+     * @example \District5\MondocBuilder\QueryTypes\ValueEqualTo::get();
      */
     public static function get()
     {

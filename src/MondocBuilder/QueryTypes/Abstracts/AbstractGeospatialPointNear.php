@@ -28,12 +28,37 @@ namespace District5\MondocBuilder\QueryTypes\Abstracts;
 abstract class AbstractGeospatialPointNear extends AbstractQueryType
 {
     /**
+     * Find documents with a geospatial location within X miles of a given coordinate set.
+     *
+     * @param string $key
+     * @param float|int $miles
+     * @param float $longitude
+     * @param float $latitude
+     *
+     * @return $this
+     * @noinspection PhpUnused
+     */
+    public function withinXMilesOfCoordinates(string $key, $miles, float $longitude, float $latitude): AbstractGeospatialPointNear
+    {
+        $distance = floatval($miles); // miles
+        $metres = $distance * 1609.344; // meters
+        $metres = intval(round($metres, 0, PHP_ROUND_HALF_UP));
+
+        return $this->withinXMetresOfCoordinates(
+            $key,
+            $metres,
+            $longitude,
+            $latitude
+        );
+    }
+
+    /**
      * Find documents with a geospatial location within X metres of a given coordinate set.
      *
      * @param string $key
-     * @param int    $metres
-     * @param float  $longitude
-     * @param float  $latitude
+     * @param int $metres
+     * @param float $longitude
+     * @param float $latitude
      *
      * @return $this
      */
@@ -48,30 +73,6 @@ abstract class AbstractGeospatialPointNear extends AbstractQueryType
         ];
 
         return $this;
-    }
-
-    /**
-     * Find documents with a geospatial location within X miles of a given coordinate set.
-     *
-     * @param string    $key
-     * @param float|int $miles
-     * @param float     $longitude
-     * @param float     $latitude
-     *
-     * @return $this
-     */
-    public function withinXMilesOfCoordinates(string $key, $miles, float $longitude, float $latitude): AbstractGeospatialPointNear
-    {
-        $distance = floatval($miles); // miles
-        $metres = $distance * 1609.344; // meters
-        $metres = intval(round(floatval($metres), 0, PHP_ROUND_HALF_UP));
-
-        return $this->withinXMetresOfCoordinates(
-            $key,
-            $metres,
-            $longitude,
-            $latitude
-        );
     }
 
     /**

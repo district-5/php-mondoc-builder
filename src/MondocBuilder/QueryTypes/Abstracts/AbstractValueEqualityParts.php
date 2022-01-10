@@ -21,7 +21,7 @@
 namespace District5\MondocBuilder\QueryTypes\Abstracts;
 
 use DateTime;
-use District5\MondocBuilder\QueryTypes\Helper;
+use District5\MondocBuilder\Helper;
 use MongoDB\BSON\Binary;
 use MongoDB\BSON\Decimal128;
 use MongoDB\BSON\Javascript;
@@ -47,15 +47,6 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
     protected const TYPE_NULL = 4;
     protected const TYPE_BUILTIN = 5;
     protected const TYPE_DATETIME = 6;
-    protected const ALL_TYPES = [
-        self::TYPE_STRING,
-        self::TYPE_INTEGER,
-        self::TYPE_FLOAT,
-        self::TYPE_BOOLEAN,
-        self::TYPE_NULL,
-        self::TYPE_BUILTIN,
-        self::TYPE_DATETIME,
-    ];
 
     /**
      * Add a string value into this equality filter.
@@ -64,6 +55,7 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @param string $string
      *
      * @return $this
+     * @noinspection PhpMissingReturnTypeInspection
      */
     public function string(string $key, string $string)
     {
@@ -79,6 +71,7 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @param int    $int
      *
      * @return $this
+     * @noinspection PhpMissingReturnTypeInspection
      */
     public function integer(string $key, int $int)
     {
@@ -94,6 +87,7 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @param float  $float
      *
      * @return $this
+     * @noinspection PhpMissingReturnTypeInspection
      */
     public function float(string $key, float $float)
     {
@@ -111,6 +105,8 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @return $this
      *
      * @see AbstractValueEqualityParts::float()
+     * @noinspection PhpMissingReturnTypeInspection
+     * @noinspection PhpUnused
      */
     public function double(string $key, float $double)
     {
@@ -124,6 +120,8 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @param bool   $bool
      *
      * @return $this
+     * @noinspection PhpMissingReturnTypeInspection
+     * @noinspection PhpUnused
      */
     public function boolean(string $key, bool $bool)
     {
@@ -138,6 +136,8 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @param string $key
      *
      * @return $this
+     * @noinspection PhpMissingReturnTypeInspection
+     * @noinspection PhpUnused
      */
     public function null(string $key)
     {
@@ -153,6 +153,7 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @param Binary|Decimal128|Javascript|MaxKey|MinKey|ObjectId|Regex|Timestamp|UTCDateTime $object
      *
      * @return $this
+     * @noinspection PhpMissingReturnTypeInspection
      */
     public function mongoNative(string $key, $object)
     {
@@ -168,6 +169,8 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @param ObjectId $objectId
      *
      * @return $this
+     * @noinspection PhpMissingReturnTypeInspection
+     * @noinspection PhpUnused
      */
     public function objectId(string $key, ObjectId $objectId)
     {
@@ -179,6 +182,8 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @param DateTime $dateTime
      *
      * @return $this
+     * @noinspection PhpMissingReturnTypeInspection
+     * @noinspection PhpUnused
      */
     public function dateTime(string $key, DateTime $dateTime)
     {
@@ -192,6 +197,8 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @param UTCDateTime $dateTime
      *
      * @return $this
+     * @noinspection PhpMissingReturnTypeInspection
+     * @noinspection PhpUnused
      */
     public function utcDateTime(string $key, UTCDateTime $dateTime)
     {
@@ -206,6 +213,7 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
     public function getArrayCopy(): array
     {
         $base = [];
+        /** @noinspection PhpUnusedLocalVariableInspection */
         foreach ($this->parts as $_ => $parts) {
             // @var $parts array
             if (empty($parts)) {
@@ -237,6 +245,7 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @param int   $variableType
      *
      * @return array
+     * @noinspection PhpMissingReturnTypeInspection
      */
     protected function buildQueryParts($value, int $variableType)
     {

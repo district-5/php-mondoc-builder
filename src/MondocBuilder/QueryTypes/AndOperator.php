@@ -57,6 +57,7 @@ class AndOperator extends AbstractQueryType
     public function getArrayCopy(): array
     {
         $base = ['$and' => []];
+        /** @noinspection PhpUnusedLocalVariableInspection */
         foreach ($this->parts as $_ => $builder) {
             $base['$and'][] = $builder->getArrayCopy();
         }

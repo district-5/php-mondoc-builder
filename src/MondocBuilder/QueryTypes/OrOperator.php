@@ -57,6 +57,7 @@ class OrOperator extends AbstractQueryType
     public function getArrayCopy(): array
     {
         $base = ['$or' => []];
+        /** @noinspection PhpUnusedLocalVariableInspection */
         foreach ($this->parts as $_ => $builder) {
             $base['$or'][] = $builder->getArrayCopy();
         }

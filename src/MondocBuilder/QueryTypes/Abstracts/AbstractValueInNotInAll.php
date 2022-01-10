@@ -31,9 +31,10 @@ abstract class AbstractValueInNotInAll extends AbstractQueryType
      * Add an array of values for this key to match against.
      *
      * @param string $key
-     * @param array  $values
+     * @param array $values
      *
      * @return $this
+     * @noinspection PhpMissingReturnTypeInspection
      */
     public function anArray(string $key, array $values)
     {
