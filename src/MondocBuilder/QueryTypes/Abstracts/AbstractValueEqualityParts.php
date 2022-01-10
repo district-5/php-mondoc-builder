@@ -21,7 +21,7 @@
 namespace District5\MondocBuilder\QueryTypes\Abstracts;
 
 use DateTime;
-use District5\MondocBuilder\Helper;
+use District5\Date\Date;
 use MongoDB\BSON\Binary;
 use MongoDB\BSON\Decimal128;
 use MongoDB\BSON\Javascript;
@@ -253,7 +253,7 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
             return [$this->getOperator() => $value];
         }
         if (self::TYPE_DATETIME === $variableType) {
-            return [$this->getOperator() => Helper::phpDateToMongoDateTime($value)];
+            return [$this->getOperator() => Date::mongo()->convertTo($value)];
         }
         if (in_array($variableType, [self::TYPE_STRING, self::TYPE_INTEGER, self::TYPE_FLOAT, self::TYPE_BOOLEAN, self::TYPE_NULL])) {
             return [$this->getOperator() => $value];

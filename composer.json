@@ -19,6 +19,12 @@
       "email": "hello@district5.co.uk"
     }
   ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/district-5/php-date.git"
+    }
+  ],
   "autoload": {
     "psr-4": {
       "District5\\MondocBuilder\\": "src/MondocBuilder/"
@@ -35,6 +41,7 @@
   "require": {
     "php": ">=7.1",
     "mongodb/mongodb": "^1.8",
+    "district5/date": ">=2.0.0",
     "ext-mongodb": "*"
   },
   "require-dev": {
