@@ -12,17 +12,11 @@
     "db"
   ],
   "homepage": "https://github.com/district-5/php-mondoc-builder",
-  "license": "Proprietary",
+  "license": "mit",
   "authors": [
     {
       "name": "District5",
       "email": "hello@district5.co.uk"
-    }
-  ],
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/district-5/php-date.git"
     }
   ],
   "autoload": {

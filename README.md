@@ -9,16 +9,6 @@ In your `composer.json` file include:
 
 ```json
 {
-    "repositories":[
-        {
-          "type": "vcs",
-          "url": "git@github.com:district-5/php-mondoc-builder.git"
-        },
-        {
-          "type": "vcs",
-          "url": "git@github.com:district-5/php-date.git"
-        }
-    ],
     "require": {
         "php": ">=7.1",
         "district5/mondoc-builder": ">=1.0.0",
