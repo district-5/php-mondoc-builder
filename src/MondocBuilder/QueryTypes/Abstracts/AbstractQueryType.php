@@ -42,16 +42,15 @@ abstract class AbstractQueryType implements AbstractExportableArray
     /**
      * @var array
      */
-    protected $parts = [];
+    protected array $parts = [];
 
     /**
      * Get an instance of this object from a static request.
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      * @example \District5\MondocBuilder\QueryTypes\ValueEqualTo::get();
      */
-    public static function get()
+    public static function get(): static
     {
         $clz = get_called_class();
 

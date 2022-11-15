@@ -65,9 +65,8 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @param string $string
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      */
-    public function string(string $key, string $string)
+    public function string(string $key, string $string): static
     {
         $this->addToQueryPart($key, $string, self::TYPE_STRING);
 
@@ -81,9 +80,8 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @param int    $int
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      */
-    public function integer(string $key, int $int)
+    public function integer(string $key, int $int): static
     {
         $this->addToQueryPart($key, $int, self::TYPE_INTEGER);
 
@@ -97,9 +95,8 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @param float  $float
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      */
-    public function float(string $key, float $float)
+    public function float(string $key, float $float): static
     {
         $this->addToQueryPart($key, $float, self::TYPE_FLOAT);
 
@@ -115,10 +112,9 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @return $this
      *
      * @see AbstractValueEqualityParts::float()
-     * @noinspection PhpMissingReturnTypeInspection
      * @noinspection PhpUnused
      */
-    public function double(string $key, float $double)
+    public function double(string $key, float $double): static
     {
         return $this->float($key, $double);
     }
@@ -130,10 +126,9 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @param bool   $bool
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      * @noinspection PhpUnused
      */
-    public function boolean(string $key, bool $bool)
+    public function boolean(string $key, bool $bool): static
     {
         $this->addToQueryPart($key, $bool, self::TYPE_BOOLEAN);
 
@@ -146,10 +141,9 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @param string $key
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      * @noinspection PhpUnused
      */
-    public function null(string $key)
+    public function null(string $key): static
     {
         $this->addToQueryPart($key, null, self::TYPE_NULL);
 
@@ -163,9 +157,8 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @param Binary|Decimal128|Javascript|MaxKey|MinKey|ObjectId|Regex|Timestamp|UTCDateTime $object
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      */
-    public function mongoNative(string $key, $object)
+    public function mongoNative(string $key, mixed $object): static
     {
         $this->addToQueryPart($key, $object, self::TYPE_BUILTIN);
 
@@ -179,10 +172,9 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @param ObjectId $objectId
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      * @noinspection PhpUnused
      */
-    public function objectId(string $key, ObjectId $objectId)
+    public function objectId(string $key, ObjectId $objectId): static
     {
         return $this->mongoNative($key, $objectId);
     }
@@ -192,10 +184,9 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @param DateTime $dateTime
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      * @noinspection PhpUnused
      */
-    public function dateTime(string $key, DateTime $dateTime)
+    public function dateTime(string $key, DateTime $dateTime): static
     {
         $this->addToQueryPart($key, $dateTime, self::TYPE_DATETIME);
 
@@ -207,10 +198,9 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @param UTCDateTime $dateTime
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      * @noinspection PhpUnused
      */
-    public function utcDateTime(string $key, UTCDateTime $dateTime)
+    public function utcDateTime(string $key, UTCDateTime $dateTime): static
     {
         return $this->mongoNative($key, $dateTime);
     }
@@ -245,7 +235,7 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @param mixed  $value
      * @param int    $type
      */
-    protected function addToQueryPart(string $key, $value, int $type)
+    protected function addToQueryPart(string $key, mixed $value, int $type)
     {
         $this->parts[] = [$key, $value, $type];
     }
@@ -255,9 +245,8 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @param int   $variableType
      *
      * @return array
-     * @noinspection PhpMissingReturnTypeInspection
      */
-    protected function buildQueryParts($value, int $variableType)
+    protected function buildQueryParts(mixed $value, int $variableType): array
     {
         if (self::TYPE_BUILTIN === $variableType) {
             return [$this->getOperator() => $value];

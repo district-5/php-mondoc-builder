@@ -44,9 +44,8 @@ abstract class AbstractValueInNotInAll extends AbstractQueryType
      * @param array $values
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      */
-    public function anArray(string $key, array $values)
+    public function anArray(string $key, array $values): static
     {
         $this->parts[$key] = $values;
 

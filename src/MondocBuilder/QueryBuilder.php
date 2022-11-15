@@ -42,17 +42,17 @@ class QueryBuilder implements AbstractExportableArray
     /**
      * @var AbstractQueryType[]
      */
-    protected $commands = [];
+    protected array $commands = [];
 
     /**
      * @var array
      */
-    protected $custom = [];
+    protected array $custom = [];
 
     /**
-     * @var QueryOptions
+     * @var QueryOptions|null
      */
-    private $options;
+    private QueryOptions|null $options = null;
 
     /**
      * Get a new instance of the QueryBuilder.

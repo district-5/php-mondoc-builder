@@ -48,10 +48,11 @@ abstract class AbstractGeospatialPointNear extends AbstractQueryType
      * @return $this
      * @noinspection PhpUnused
      */
-    public function withinXMilesOfCoordinates(string $key, $miles, float $longitude, float $latitude): AbstractGeospatialPointNear
+    public function withinXMilesOfCoordinates(string $key, float|int $miles, float $longitude, float $latitude): AbstractGeospatialPointNear
     {
         $distance = floatval($miles); // miles
         $metres = $distance * 1609.344; // meters
+        /** @noinspection PhpRedundantOptionalArgumentInspection */
         $metres = intval(round($metres, 0, PHP_ROUND_HALF_UP));
 
         return $this->withinXMetresOfCoordinates(

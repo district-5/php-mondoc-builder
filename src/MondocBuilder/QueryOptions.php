@@ -40,22 +40,22 @@ class QueryOptions implements AbstractExportableArray
     /**
      * @var array
      */
-    private $sortBy = [];
+    private array $sortBy = [];
 
     /**
      * @var null|int
      */
-    private $skip;
+    private int|null $skip = null;
 
     /**
      * @var null|int
      */
-    private $limit;
+    private int|null $limit = null;
 
     /**
      * @var array
      */
-    private $custom = [];
+    private array $custom = [];
 
     /**
      * QueryOptions constructor.

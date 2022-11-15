@@ -10,7 +10,7 @@ In your `composer.json` file include:
 ```json
 {
     "require": {
-        "php": ">=7.1",
+        "php": ">=8.1",
         "district5/mondoc-builder": ">=1.0.0",
         "district5/date": ">=2.0.0",
         "mongodb/mongodb": "^1.5",

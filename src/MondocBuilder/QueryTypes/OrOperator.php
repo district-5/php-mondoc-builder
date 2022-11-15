@@ -43,7 +43,7 @@ class OrOperator extends AbstractQueryType
     /**
      * @var QueryBuilder[]
      */
-    protected $parts = [];
+    protected array $parts = [];
 
     /**
      * Add a query to this $or operation.
