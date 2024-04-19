@@ -97,6 +97,7 @@ $builder->addQueryPart(
 There are multiple `Part` types. These are listed below:
 * `AndOperator` - `$and` - Add builders to this object create an `$and` query.
 * `OrOperator` - `$or` - Add builders to this object to create an `$or` query.
+* `KeyExists` - `$exists` - A field exists or does not exist.
 * `ValueEqualTo` - `$eq` - A field is equal to a value.
 * `ValueGreaterThan` - `$gt` - A field value is `>` than a provided value.
 * `ValueGreaterThanOrEqualTo` - `$gte` -  A field value is `>=` a given value.
@@ -198,6 +199,10 @@ use District5\MondocBuilder\QueryTypes\ValueGreaterThan;use District5\MondocBuil
 use MongoDB\BSON\UTCDateTime;
 
 $builder = QueryBuilder::get();
+
+// '$exists' query part
+$exists = new KeyExists();
+$exists->true('aField');
 
 // basic equals
 $equals = new ValueEqualTo();

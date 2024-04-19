@@ -35,6 +35,7 @@ use District5\MondocBuilder\QueryTypes\AndOperator;
 use District5\MondocBuilder\QueryTypes\GeospatialPointNear;
 use District5\MondocBuilder\QueryTypes\GeospatialPointNearSphere;
 use District5\MondocBuilder\QueryTypes\HasAllValues;
+use District5\MondocBuilder\QueryTypes\KeyExists;
 use District5\MondocBuilder\QueryTypes\OrOperator;
 use District5\MondocBuilder\QueryTypes\SizeOfValue;
 use District5\MondocBuilder\QueryTypes\ValueEqualTo;
@@ -59,6 +60,10 @@ class QueryBuilderTest extends TestCase
     public function testBasicKeyEqualityBuilder()
     {
         $builder = QueryBuilder::get();
+
+        $exists = new KeyExists();
+        $exists->true('firstName');
+        $builder->addQueryPart($exists);
 
         $eq = new ValueEqualTo();
         $eq->string('firstName', 'Joe');
@@ -132,6 +137,7 @@ class QueryBuilderTest extends TestCase
         $this->assertArrayHasKey('$lte', $query['numberFilms']);
         $this->assertArrayHasKey('$gte', $query['numberBooks']);
 
+        $this->assertTrue($query['firstName']['$exists']);
         $this->assertEquals('Joe', $query['firstName']['$eq']);
         $this->assertEquals('Bloggs', $query['lastName']['$ne']);
         $this->assertEquals(40, $query['age']['$lt']);
@@ -143,19 +149,31 @@ class QueryBuilderTest extends TestCase
     public function testBasicOrOperator()
     {
         $builderOne = QueryBuilder::get();
+
+        $existsOne = new KeyExists();
+        $existsOne->true('firstName');
+        $builderOne->addQueryPart($existsOne);
+
         $eqOne = new ValueEqualTo();
         $eqOne->string('firstName', 'Joe');
+        $builderOne->addQueryPart($eqOne);
 
         $ltOne = new ValueLessThan();
         $ltOne->integer('age', 15);
-        $builderOne->addQueryPart($eqOne)->addQueryPart($ltOne);
+        $builderOne->addQueryPart($ltOne);
 
         $builderTwo = QueryBuilder::get();
+
+        $existsTwo = new KeyExists();
+        $existsTwo->false('firstName');
+        $builderTwo->addQueryPart($existsTwo);
+
         $eqTwo = new ValueEqualTo();
         $eqTwo->string('firstName', 'Jane');
+        $builderTwo->addQueryPart($eqTwo);
         $neTwo = new ValueNotEqualTo();
         $neTwo->string('lastName', 'Bloggs');
-        $builderTwo->addQueryPart($eqTwo)->addQueryPart($neTwo);
+        $builderTwo->addQueryPart($neTwo);
 
         $or = new OrOperator();
         $or->addBuilder($builderOne)->addBuilder($builderTwo);
@@ -168,7 +186,9 @@ class QueryBuilderTest extends TestCase
         $this->assertCount(2, $query['$or']);
 
         $this->assertArrayHasKey('firstName', $query['$or'][0]);
+        $this->assertArrayHasKey('$exists', $query['$or'][0]['firstName']);
         $this->assertArrayHasKey('age', $query['$or'][0]);
+        $this->assertArrayHasKey('$exists', $query['$or'][1]['firstName']);
         $this->assertArrayHasKey('firstName', $query['$or'][1]);
         $this->assertArrayHasKey('lastName', $query['$or'][1]);
         $this->assertArrayHasKey('$eq', $query['$or'][0]['firstName']);
@@ -176,8 +196,10 @@ class QueryBuilderTest extends TestCase
         $this->assertArrayHasKey('$eq', $query['$or'][1]['firstName']);
         $this->assertArrayHasKey('$ne', $query['$or'][1]['lastName']);
 
+        $this->assertTrue($query['$or'][0]['firstName']['$exists']);
         $this->assertEquals('Joe', $query['$or'][0]['firstName']['$eq']);
         $this->assertEquals(15, $query['$or'][0]['age']['$lt']);
+        $this->assertFalse($query['$or'][1]['firstName']['$exists']);
         $this->assertEquals('Jane', $query['$or'][1]['firstName']['$eq']);
         $this->assertEquals('Bloggs', $query['$or'][1]['lastName']['$ne']);
     }
