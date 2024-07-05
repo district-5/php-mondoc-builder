@@ -1,3 +1,4 @@
 # Vendor and composer
 vendor/
 composer.lock
+build

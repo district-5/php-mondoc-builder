@@ -68,50 +68,44 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      */
     public function string(string $key, string $string): static
     {
-        $this->addToQueryPart($key, $string, self::TYPE_STRING);
-
-        return $this;
+        return $this->addToQueryPart($key, $string, self::TYPE_STRING);
     }
 
     /**
      * Add an integer value into this equality filter.
      *
      * @param string $key
-     * @param int    $int
+     * @param int $int
      *
      * @return $this
      */
     public function integer(string $key, int $int): static
     {
-        $this->addToQueryPart($key, $int, self::TYPE_INTEGER);
-
-        return $this;
+        return $this->addToQueryPart($key, $int, self::TYPE_INTEGER);
     }
 
     /**
      * Add a float value into this equality filter.
      *
      * @param string $key
-     * @param float  $float
+     * @param float $float
      *
      * @return $this
      */
     public function float(string $key, float $float): static
     {
-        $this->addToQueryPart($key, $float, self::TYPE_FLOAT);
-
-        return $this;
+        return $this->addToQueryPart($key, $float, self::TYPE_FLOAT);
     }
 
     /**
      * Add a float value into this equality filter.
      *
      * @param string $key
-     * @param float  $double
+     * @param float $double
      *
      * @return $this
      *
-     * @see AbstractValueEqualityParts::float()
+     * @see          AbstractValueEqualityParts::float()
      * @noinspection PhpUnused
      */
     public function double(string $key, float $double): static
@@ -123,16 +117,14 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * Add a boolean value into this equality filter.
      *
      * @param string $key
-     * @param bool   $bool
+     * @param bool $bool
      *
      * @return $this
      * @noinspection PhpUnused
      */
     public function boolean(string $key, bool $bool): static
     {
-        $this->addToQueryPart($key, $bool, self::TYPE_BOOLEAN);
-
-        return $this;
+        return $this->addToQueryPart($key, $bool, self::TYPE_BOOLEAN);
     }
 
     /**
@@ -145,30 +137,26 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      */
     public function null(string $key): static
     {
-        $this->addToQueryPart($key, null, self::TYPE_NULL);
-
-        return $this;
+        return $this->addToQueryPart($key, null, self::TYPE_NULL);
     }
 
     /**
      * Add a native Mongo object into this equality filter.
      *
-     * @param string                                                                          $key
+     * @param string $key
      * @param Binary|Decimal128|Javascript|MaxKey|MinKey|ObjectId|Regex|Timestamp|UTCDateTime $object
      *
      * @return $this
      */
     public function mongoNative(string $key, mixed $object): static
     {
-        $this->addToQueryPart($key, $object, self::TYPE_BUILTIN);
-
-        return $this;
+        return $this->addToQueryPart($key, $object, self::TYPE_BUILTIN);
     }
 
     /**
      * Add an ObjectId part into this equality filter.
      *
-     * @param string   $key
+     * @param string $key
      * @param ObjectId $objectId
      *
      * @return $this
@@ -180,7 +168,7 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
     }
 
     /**
-     * @param string   $key
+     * @param string $key
      * @param DateTime $dateTime
      *
      * @return $this
@@ -188,13 +176,11 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      */
     public function dateTime(string $key, DateTime $dateTime): static
     {
-        $this->addToQueryPart($key, $dateTime, self::TYPE_DATETIME);
-
-        return $this;
+        return $this->addToQueryPart($key, $dateTime, self::TYPE_DATETIME);
     }
 
     /**
-     * @param string      $key
+     * @param string $key
      * @param UTCDateTime $dateTime
      *
      * @return $this
@@ -232,17 +218,19 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
 
     /**
      * @param string $key
-     * @param mixed  $value
-     * @param int    $type
+     * @param mixed $value
+     * @param int $type
+     * @return $this
      */
-    protected function addToQueryPart(string $key, mixed $value, int $type)
+    protected function addToQueryPart(string $key, mixed $value, int $type): static
     {
         $this->parts[] = [$key, $value, $type];
+        return $this;
     }
 
     /**
      * @param mixed $value
-     * @param int   $variableType
+     * @param int $variableType
      *
      * @return array
      */
@@ -250,11 +238,9 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
     {
         if (self::TYPE_BUILTIN === $variableType) {
             return [$this->getOperator() => $value];
-        }
-        if (self::TYPE_DATETIME === $variableType) {
+        } else if (self::TYPE_DATETIME === $variableType) {
             return [$this->getOperator() => Date::mongo()->convertTo($value)];
-        }
-        if (in_array($variableType, [self::TYPE_STRING, self::TYPE_INTEGER, self::TYPE_FLOAT, self::TYPE_BOOLEAN, self::TYPE_NULL])) {
+        } else if (in_array($variableType, [self::TYPE_STRING, self::TYPE_INTEGER, self::TYPE_FLOAT, self::TYPE_BOOLEAN, self::TYPE_NULL])) {
             return [$this->getOperator() => $value];
         }
 

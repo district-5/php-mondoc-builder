@@ -61,7 +61,6 @@ abstract class AbstractValueInNotInAll extends AbstractQueryType
     {
         $base = [];
         foreach ($this->parts as $key => $parts) {
-            // @var $parts array
             if (empty($parts)) {
                 continue;
             }

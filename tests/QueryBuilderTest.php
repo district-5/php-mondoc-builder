@@ -31,6 +31,7 @@
 namespace District5Tests\MondocBuilderTests;
 
 use District5\MondocBuilder\QueryBuilder;
+use District5\MondocBuilder\QueryOptions;
 use District5\MondocBuilder\QueryTypes\AndOperator;
 use District5\MondocBuilder\QueryTypes\GeospatialPointNear;
 use District5\MondocBuilder\QueryTypes\GeospatialPointNearSphere;
@@ -298,6 +299,13 @@ class QueryBuilderTest extends TestCase
         $this->assertEquals(-1, $export['sort']['name']);
         $this->assertArrayHasKey('foo', $export);
         $this->assertEquals('bar', $export['foo']);
+
+        $optionsSimple = new QueryOptions(new QueryBuilder());
+        $optionsSimple->setSortBySimple('name', 1);
+        $export = $optionsSimple->getArrayCopy();
+        $this->assertArrayHasKey('sort', $export);
+        $this->assertArrayHasKey('name', $export['sort']);
+        $this->assertEquals(1, $export['sort']['name']);
     }
 
     public function testGeoSpatialNear()
