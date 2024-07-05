@@ -1,6 +1,8 @@
 District5 - MondocBuilder
 ======
 
+![CI](https://github.com/district-5/php-mondoc-builder/actions/workflows/ci.yml/badge.svg?branch=master)
+
 #### A MongoDB query building library.
 
 ### Installation...
