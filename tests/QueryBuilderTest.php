@@ -32,6 +32,7 @@ namespace District5Tests\MondocBuilderTests;
 
 use District5\MondocBuilder\QueryBuilder;
 use District5\MondocBuilder\QueryOptions;
+use District5\MondocBuilder\QueryOptionsProjection;
 use District5\MondocBuilder\QueryTypes\AndOperator;
 use District5\MondocBuilder\QueryTypes\GeospatialPointNear;
 use District5\MondocBuilder\QueryTypes\GeospatialPointNearSphere;
@@ -312,7 +313,7 @@ class QueryBuilderTest extends TestCase
     {
         $builder = QueryBuilder::get();
         $geo = new GeospatialPointNear();
-        $geo->withinXMetresOfCoordinates('myLocation', 40, 1.22, 2.33);
+        $geo->withinXMilesOfCoordinates('myLocation', 40, 1.22, 2.33);
         $builder->addQueryPart($geo);
         $query = $builder->getArrayCopy();
         $this->assertArrayHasKey('myLocation', $query);
@@ -324,7 +325,7 @@ class QueryBuilderTest extends TestCase
         $this->assertCount(2, $query['myLocation']['$near']['$geometry']['coordinates']);
         $this->assertEquals(1.22, $query['myLocation']['$near']['$geometry']['coordinates'][0]);
         $this->assertEquals(2.33, $query['myLocation']['$near']['$geometry']['coordinates'][1]);
-        $this->assertEquals(40, $query['myLocation']['$near']['$maxDistance']);
+        $this->assertEquals(64374, $query['myLocation']['$near']['$maxDistance']);
     }
 
     public function testGeoSpatialNearSphere()
@@ -385,11 +386,44 @@ class QueryBuilderTest extends TestCase
         $builder->addCustomArrayPart($customOne);
         $builder->addCustomArrayPart($customTwo);
 
+        $builder->addCustomArrayPart([]);
+
         $final = $builder->getArrayCopy();
         $this->assertArrayHasKey('name', $final);
         $this->assertArrayHasKey('num', $final);
         $this->assertArrayHasKey('town', $final);
         $this->assertEquals('Jane', $final['name']);
         $this->assertEquals(456, $final['num']);
+    }
+
+    public function testQueryOptionsProjection()
+    {
+        $projection = new QueryOptionsProjection();
+        $this->assertFalse($projection->has('foo'));
+        $this->assertTrue($projection->isEmpty());
+        $this->assertEmpty($projection->getArrayCopy());
+
+        $projection->add('foo', 1);
+        $this->assertTrue($projection->has('foo'));
+        $this->assertFalse($projection->isEmpty());
+        $this->assertArrayHasKey('foo', $projection->getArrayCopy());
+        $this->assertEquals(1, $projection->getArrayCopy()['foo']);
+    }
+
+    public function testQueryOptionsProjectionInBuilder()
+    {
+        $builder = new QueryBuilder();
+        $builder->addQueryPart(ValueEqualTo::get()->string('foo', 'bar'));
+        $builder->getOptions()->getProjection()->add('foo', 1);
+
+        $query = $builder->getArrayCopy();
+        $this->assertArrayHasKey('foo', $query);
+        $this->assertArrayHasKey('$eq', $query['foo']);
+        $this->assertEquals('bar', $query['foo']['$eq']);
+
+        $options = $builder->getOptions()->getArrayCopy();
+        $this->assertArrayHasKey('projection', $options);
+        $this->assertArrayHasKey('foo', $options['projection']);
+        $this->assertEquals(1, $options['projection']['foo']);
     }
 }

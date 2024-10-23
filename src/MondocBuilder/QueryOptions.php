@@ -58,6 +58,11 @@ class QueryOptions implements AbstractExportableArray
     private array $custom = [];
 
     /**
+     * @var QueryOptionsProjection|null
+     */
+    private ?QueryOptionsProjection $projection = null;
+
+    /**
      * QueryOptions constructor.
      *
      * @param QueryBuilder $builder
@@ -65,6 +70,18 @@ class QueryOptions implements AbstractExportableArray
     public function __construct(QueryBuilder $builder)
     {
         $builder->setOptions($this);
+    }
+
+    /**
+     * @return QueryOptionsProjection
+     */
+    public function getProjection(): QueryOptionsProjection
+    {
+        if (null === $this->projection) {
+            $this->projection = new QueryOptionsProjection();
+        }
+
+        return $this->projection;
     }
 
     /**
@@ -149,6 +166,12 @@ class QueryOptions implements AbstractExportableArray
         if (null !== $this->limit) {
             $opts['limit'] = $this->limit;
         }
+
+        $projection = $this->getProjection();
+        if (!$projection->isEmpty()) {
+            $opts['projection'] = $projection->getArrayCopy();
+        }
+
         if (!empty($this->custom)) {
             return array_merge($opts, $this->custom);
         }
