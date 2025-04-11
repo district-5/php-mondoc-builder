@@ -30,6 +30,7 @@
 
 namespace District5Tests\MondocBuilderTests;
 
+use District5\Date\Date;
 use District5\MondocBuilder\QueryBuilder;
 use District5\MondocBuilder\QueryOptions;
 use District5\MondocBuilder\QueryOptionsProjection;
@@ -48,6 +49,7 @@ use District5\MondocBuilder\QueryTypes\ValueLessThan;
 use District5\MondocBuilder\QueryTypes\ValueLessThanOrEqualTo;
 use District5\MondocBuilder\QueryTypes\ValueNotEqualTo;
 use District5\MondocBuilder\QueryTypes\ValueNotInValues;
+use MongoDB\BSON\ObjectId;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -62,6 +64,7 @@ class QueryBuilderTest extends TestCase
     public function testBasicKeyEqualityBuilder()
     {
         $builder = QueryBuilder::get();
+        $this->assertEmpty($builder->getArrayCopy());
 
         $exists = new KeyExists();
         $exists->true('firstName');
@@ -81,6 +84,10 @@ class QueryBuilderTest extends TestCase
 
         $gt = new ValueGreaterThan();
         $gt->float('position', 1.002);
+        $builder->addQueryPart($gt);
+
+        $gt = new ValueGreaterThan();
+        $gt->double('position', 1.002);
         $builder->addQueryPart($gt);
 
         $lte = new ValueLessThanOrEqualTo();
@@ -106,6 +113,26 @@ class QueryBuilderTest extends TestCase
         $size = new SizeOfValue();
         $size->equals('numbers', 3);
         $builder->addQueryPart($size);
+
+        $anId = new ObjectId();
+        $obj = new ValueEqualTo();
+        $obj->objectId('identifier', $anId);
+        $builder->addQueryPart($obj);
+
+        $lessThanInt = new ValueLessThan();
+        $lessThanInt->integer('age', 40);
+        $builder->addQueryPart($lessThanInt);
+
+        $greaterThanInt = new ValueGreaterThan();
+        $greaterThanInt->integer('age', 20);
+        $builder->addQueryPart($greaterThanInt);
+
+        $dateTime = Date::mongo()->convertTo(
+            Date::createYMDHISM(2021, 1, 1, 0, 0, 0)
+        );
+        $dt = new ValueEqualTo();
+        $dt->utcDateTime('created_at', $dateTime);
+        $builder->addQueryPart($dt);
 
         $query = $builder->getArrayCopy();
         $this->assertArrayHasKey('firstName', $query);
@@ -146,6 +173,13 @@ class QueryBuilderTest extends TestCase
         $this->assertEquals(1.002, $query['position']['$gt']);
         $this->assertEquals(55, $query['numberFilms']['$lte']);
         $this->assertEquals(100, $query['numberBooks']['$gte']);
+
+        $this->assertEquals($anId, $query['identifier']['$eq']);
+
+        $this->assertEquals($dateTime, $query['created_at']['$eq']);
+
+        $this->assertEquals(40, $query['age']['$lt']);
+        $this->assertEquals(20, $query['age']['$gt']);
     }
 
     public function testBasicOrOperator()
