@@ -30,43 +30,61 @@
 
 namespace District5Tests\MondocBuilderTests;
 
-use District5\MondocBuilder\Exception\MondocBuilderInvalidTypeException;
+use District5\MondocBuilder\QueryBuilder;
+use District5\MondocBuilder\QueryTypes\ValueGreaterThan;
 use District5\MondocBuilder\QueryTypes\ValueGreaterThanOrEqualTo;
-use PHPUnit\Framework\TestCase;
-use ReflectionClass;
-use ReflectionException;
-use UnexpectedValueException;
+use District5\MondocBuilder\QueryTypes\ValueLessThan;
+use District5\MondocBuilder\QueryTypes\ValueLessThanOrEqualTo;
 
 /**
- * Class LargeOrTest
+ * Class CombinedEqualityTest
  *
  * @package District5\MondocBuilderTests
  *
  * @internal
  */
-class QueryPartTest extends TestCase
+class CombinedEqualityTest extends TestQueryTypeAbstract
 {
-    public function testValidQueryPart()
+    public function testQueryType()
     {
-        $greaterThan = ValueGreaterThanOrEqualTo::get()->integer('intKey', 1);
-        $this->assertEquals(['intKey' => ['$gte' => 1]], $greaterThan->getArrayCopy());
+        $this->expectNotToPerformAssertions();
     }
 
-    /**
-     * Can only be triggered by an extension to the QueryPart
-     * @return void
-     * @throws ReflectionException
-     */
-    public function testInvalidQueryPart(): void
+    public function testQueryTypeWithBuilder()
     {
-        $this->expectException(MondocBuilderInvalidTypeException::class);
+        $builder = QueryBuilder::get();
+        $gt = ValueGreaterThan::get()->integer(
+            'k',
+            1
+        );
+        $gte = ValueGreaterThanOrEqualTo::get()->float(
+            'k',
+            1.1
+        );
+        $lt = ValueLessThan::get()->integer(
+            'k',
+            2
+        );
+        $lte = ValueLessThanOrEqualTo::get()->float(
+            'k',
+            3.1
+        );
 
-        $reflectionClass = new ReflectionClass(ValueGreaterThanOrEqualTo::class);
-        // Create a new instance of the class
-        $instance = $reflectionClass->newInstance();
-        $reflectionMethod = $reflectionClass->getMethod('buildQueryParts');
-        /** @noinspection PhpExpressionResultUnusedInspection */
-        $reflectionMethod->setAccessible(true);
-        $reflectionMethod->invoke($instance, 'intKey', 999); // This will throw an exception as 999 is not a valid type
+        $builder->addQueryPart($gt);
+        $builder->addQueryPart($gte);
+        $builder->addQueryPart($lt);
+        $builder->addQueryPart($lte);
+
+        $this->assertEquals(
+            [
+                'k' => [
+                    '$gt' => 1,
+                    '$gte' => 1.1,
+                    '$lt' => 2,
+                    '$lte' => 3.1,
+                ],
+            ],
+            $builder->getArrayCopy()
+        );
     }
 }

@@ -28,22 +28,60 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\MondocBuilder\QueryTypes;
+namespace District5Tests\MondocBuilderTests\QueryTypesTests;
 
-use District5\MondocBuilder\QueryTypes\Abstracts\AbstractOrNorAll;
+use District5\MondocBuilder\QueryBuilder;
+use District5\MondocBuilder\QueryTypes\KeyExists;
+use District5Tests\MondocBuilderTests\TestQueryTypeAbstract;
 
 /**
- * Class OrOperator.
+ * Class KeyExistsTest
  *
- * @package District5\MondocBuilder\QueryTypes
+ * @package District5\MondocBuilderTests
+ *
+ * @internal
  */
-class OrOperator extends AbstractOrNorAll
+class KeyExistsTest extends TestQueryTypeAbstract
 {
-    /**
-     * @return string
-     */
-    protected function getOperator(): string
+    public function testQueryType()
     {
-        return '$or';
+        $query = KeyExists::get()->true(
+            'k'
+        )->false(
+            'f'
+        );
+        $this->assertEquals(
+            [
+                'k' => [
+                    '$exists' => true,
+                ],
+                'f' => [
+                    '$exists' => false,
+                ]
+            ],
+            $query->getArrayCopy()
+        );
+    }
+
+    public function testQueryTypeWithBuilder()
+    {
+        $builder = QueryBuilder::get();
+        $query = KeyExists::get()->true(
+            'k'
+        )->false(
+            'f'
+        );
+        $builder->addQueryPart($query);
+        $this->assertEquals(
+            [
+                'k' => [
+                    '$exists' => true,
+                ],
+                'f' => [
+                    '$exists' => false,
+                ]
+            ],
+            $builder->getArrayCopy()
+        );
     }
 }

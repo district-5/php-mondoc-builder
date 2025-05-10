@@ -28,7 +28,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5Tests\MondocBuilderTests;
+namespace District5Tests\MondocBuilderTests\BulkTests;
 
 use District5\Date\Date;
 use District5\MondocBuilder\QueryBuilder;
@@ -55,7 +55,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Class QueryBuilderTest.
  *
- * @package District5\MondocBuilderTests
+ * @package District5\MondocBuilderTests\BulkTests
  *
  * @internal
  */

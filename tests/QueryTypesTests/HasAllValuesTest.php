@@ -28,45 +28,64 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5Tests\MondocBuilderTests;
+namespace District5Tests\MondocBuilderTests\QueryTypesTests;
 
-use District5\MondocBuilder\Exception\MondocBuilderInvalidTypeException;
-use District5\MondocBuilder\QueryTypes\ValueGreaterThanOrEqualTo;
-use PHPUnit\Framework\TestCase;
-use ReflectionClass;
-use ReflectionException;
-use UnexpectedValueException;
+use District5\MondocBuilder\QueryBuilder;
+use District5\MondocBuilder\QueryTypes\HasAllValues;
+use District5Tests\MondocBuilderTests\TestQueryTypeAbstract;
 
 /**
- * Class LargeOrTest
+ * Class HasAllValuesTest
  *
  * @package District5\MondocBuilderTests
  *
  * @internal
  */
-class QueryPartTest extends TestCase
+class HasAllValuesTest extends TestQueryTypeAbstract
 {
-    public function testValidQueryPart()
+    public function testQueryType()
     {
-        $greaterThan = ValueGreaterThanOrEqualTo::get()->integer('intKey', 1);
-        $this->assertEquals(['intKey' => ['$gte' => 1]], $greaterThan->getArrayCopy());
+        $query = HasAllValues::get()->anArray(
+            'k',
+            [
+                'foo',
+                'bar',
+            ]
+        );
+        $this->assertEquals(
+            [
+                'k' => [
+                    '$all' => [
+                        'foo',
+                        'bar',
+                    ],
+                ]
+            ],
+            $query->getArrayCopy()
+        );
     }
 
-    /**
-     * Can only be triggered by an extension to the QueryPart
-     * @return void
-     * @throws ReflectionException
-     */
-    public function testInvalidQueryPart(): void
+    public function testQueryTypeWithBuilder()
     {
-        $this->expectException(MondocBuilderInvalidTypeException::class);
-
-        $reflectionClass = new ReflectionClass(ValueGreaterThanOrEqualTo::class);
-        // Create a new instance of the class
-        $instance = $reflectionClass->newInstance();
-        $reflectionMethod = $reflectionClass->getMethod('buildQueryParts');
-        /** @noinspection PhpExpressionResultUnusedInspection */
-        $reflectionMethod->setAccessible(true);
-        $reflectionMethod->invoke($instance, 'intKey', 999); // This will throw an exception as 999 is not a valid type
+        $builder = QueryBuilder::get();
+        $query = HasAllValues::get()->anArray(
+            'k',
+            [
+                'foo',
+                'bar',
+            ]
+        );
+        $builder->addQueryPart($query);
+        $this->assertEquals(
+            [
+                'k' => [
+                    '$all' => [
+                        'foo',
+                        'bar',
+                    ],
+                ]
+            ],
+            $builder->getArrayCopy()
+        );
     }
 }

@@ -87,27 +87,20 @@ class QueryBuilder implements AbstractExportableArray
     public function getArrayCopy(): array
     {
         $final = [];
+
         foreach ($this->commands as $command) {
-            $array = $command->getArrayCopy();
-            foreach ($array as $k => $v) {
-                if (!array_key_exists($k, $final)) {
-                    $final[$k] = [];
-                }
-                foreach ($v as $a => $b) {
-                    $final[$k][$a] = $b;
-                }
+            foreach ($command->getArrayCopy() as $key => $values) {
+                $final[$key] = $final[$key] ?? [];
+                $final[$key] = array_merge($final[$key], $values);
             }
         }
-        if (!empty($this->custom)) {
-            $tmp = array_merge([], $final);
-            foreach ($this->custom as $item) {
-                if (empty($item)) {
-                    continue;
-                }
-                $tmp = array_merge($tmp, $item);
-            }
 
-            return $tmp;
+        if (!empty($this->custom)) {
+            foreach ($this->custom as $item) {
+                if (!empty($item)) {
+                    $final = array_merge($final, $item);
+                }
+            }
         }
 
         return $final;

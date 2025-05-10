@@ -37,13 +37,13 @@ use District5\MondocBuilder\QueryTypes\Abstracts\AbstractOrNorAll;
  *
  * @package District5\MondocBuilder\QueryTypes
  */
-class OrOperator extends AbstractOrNorAll
+class NorOperator extends AbstractOrNorAll
 {
     /**
      * @return string
      */
     protected function getOperator(): string
     {
-        return '$or';
+        return '$nor';
     }
 }

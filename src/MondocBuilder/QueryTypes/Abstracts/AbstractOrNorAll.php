@@ -28,22 +28,55 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\MondocBuilder\QueryTypes;
+namespace District5\MondocBuilder\QueryTypes\Abstracts;
 
-use District5\MondocBuilder\QueryTypes\Abstracts\AbstractOrNorAll;
+use District5\MondocBuilder\QueryBuilder;
 
 /**
- * Class OrOperator.
+ * Class AbstractOrNorAll.
  *
- * @package District5\MondocBuilder\QueryTypes
+ * @package District5\MondocBuilder\QueryTypes\Abstracts
  */
-class OrOperator extends AbstractOrNorAll
+abstract class AbstractOrNorAll extends AbstractQueryType
 {
+
+    /**
+     * @var QueryBuilder[]
+     */
+    protected array $parts = [];
+
+    /**
+     * Add a query to this $or operation.
+     *
+     * @param QueryBuilder $builder
+     *
+     * @return $this
+     */
+    public function addBuilder(QueryBuilder $builder): self
+    {
+        $this->parts[] = $builder;
+
+        return $this;
+    }
+
+    /**
+     * Get the array version of this query part.
+     *
+     * @return array
+     */
+    public function getArrayCopy(): array
+    {
+        $base = [$this->getOperator() => []];
+        /** @noinspection PhpUnusedLocalVariableInspection */
+        foreach ($this->parts as $_ => $builder) {
+            $base[$this->getOperator()][] = $builder->getArrayCopy();
+        }
+
+        return $base;
+    }
+
     /**
      * @return string
      */
-    protected function getOperator(): string
-    {
-        return '$or';
-    }
+    abstract protected function getOperator(): string;
 }

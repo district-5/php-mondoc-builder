@@ -28,22 +28,15 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\MondocBuilder\QueryTypes;
+namespace District5\MondocBuilder\Exception;
 
-use District5\MondocBuilder\QueryTypes\Abstracts\AbstractOrNorAll;
+use UnexpectedValueException;
 
 /**
- * Class OrOperator.
+ * Class MondocBuilderExceptionAbstract.
  *
- * @package District5\MondocBuilder\QueryTypes
+ * @package District5\MondocBuilder
  */
-class OrOperator extends AbstractOrNorAll
+abstract class MondocBuilderExceptionAbstract extends UnexpectedValueException
 {
-    /**
-     * @return string
-     */
-    protected function getOperator(): string
-    {
-        return '$or';
-    }
 }

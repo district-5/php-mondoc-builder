@@ -28,22 +28,52 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\MondocBuilder\QueryTypes;
+namespace District5Tests\MondocBuilderTests\QueryTypesTests;
 
-use District5\MondocBuilder\QueryTypes\Abstracts\AbstractOrNorAll;
+use District5\MondocBuilder\QueryBuilder;
+use District5\MondocBuilder\QueryTypes\ValueGreaterThan;
+use District5Tests\MondocBuilderTests\TestQueryTypeAbstract;
 
 /**
- * Class OrOperator.
+ * Class ValueGreaterThanTest
  *
- * @package District5\MondocBuilder\QueryTypes
+ * @package District5\MondocBuilderTests
+ *
+ * @internal
  */
-class OrOperator extends AbstractOrNorAll
+class ValueGreaterThanTest extends TestQueryTypeAbstract
 {
-    /**
-     * @return string
-     */
-    protected function getOperator(): string
+    public function testQueryType()
     {
-        return '$or';
+        $query = ValueGreaterThan::get()->integer(
+            'k',
+            1
+        );
+        $this->assertEquals(
+            [
+                'k' => [
+                    '$gt' => 1,
+                ],
+            ],
+            $query->getArrayCopy()
+        );
+    }
+
+    public function testQueryTypeWithBuilder()
+    {
+        $builder = QueryBuilder::get();
+        $query = ValueGreaterThan::get()->integer(
+            'k',
+            1
+        );
+        $builder->addQueryPart($query);
+        $this->assertEquals(
+            [
+                'k' => [
+                    '$gt' => 1,
+                ],
+            ],
+            $builder->getArrayCopy()
+        );
     }
 }

@@ -52,7 +52,6 @@ abstract class AbstractGeospatialPointNear extends AbstractQueryType
     {
         $distance = floatval($miles); // miles
         $metres = $distance * 1609.344; // meters
-        /** @noinspection PhpRedundantOptionalArgumentInspection */
         $metres = intval(round($metres, 0, PHP_ROUND_HALF_UP));
 
         return $this->withinXMetresOfCoordinates(
