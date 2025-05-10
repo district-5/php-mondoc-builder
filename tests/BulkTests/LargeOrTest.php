@@ -28,11 +28,12 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5Tests\MondocBuilderTests;
+namespace District5Tests\MondocBuilderTests\BulkTests;
 
 use District5\Date\Date;
 use District5\MondocBuilder\QueryBuilder;
 use District5\MondocBuilder\QueryTypes\KeyExists;
+use District5\MondocBuilder\QueryTypes\NorOperator;
 use District5\MondocBuilder\QueryTypes\OrOperator;
 use District5\MondocBuilder\QueryTypes\ValueEqualTo;
 use District5\MondocBuilder\QueryTypes\ValueGreaterThanOrEqualTo;
@@ -46,7 +47,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Class LargeOrTest
  *
- * @package District5\MondocBuilderTests
+ * @package District5\MondocBuilderTests\BulkTests
  *
  * @internal
  */
@@ -155,10 +156,41 @@ class LargeOrTest extends TestCase
 
         $queryBuilder->addQueryPart($or);
 
+        $nor = NorOperator::get();
+
+        $firstNor = QueryBuilder::get();
+        $norPartOne = ValueNotEqualTo::get()->float('price', 0.0);
+        $norPartTwo = KeyExists::get()->true('price');
+        $norPartThree = ValueEqualTo::get()->boolean('price', false);
+        $firstNor->addQueryPart(
+            $norPartOne
+        )->addQueryPart(
+            $norPartTwo
+        )->addQueryPart(
+            $norPartThree
+        );
+        $nor->addBuilder($firstNor);
+
+        $secondNor = QueryBuilder::get();
+        $norPartFour = ValueEqualTo::get()->boolean('cancelled', true);
+        $norPartFive = ValueEqualTo::get()->boolean('refunded', true);
+        $norPartSix = ValueEqualTo::get()->boolean('deleted', true);
+        $secondNor->addQueryPart(
+            $norPartFour
+        )->addQueryPart(
+            $norPartFive
+        )->addQueryPart(
+            $norPartSix
+        );
+        $nor->addBuilder($secondNor);
+        $queryBuilder->addQueryPart($nor);
+
         $finalQuery = $queryBuilder->getArrayCopy();
 
         $this->assertArrayHasKey('$or', $finalQuery);
+        $this->assertArrayHasKey('$nor', $finalQuery);
         $this->assertCount(3, $finalQuery['$or']);
+        $this->assertCount(2, $finalQuery['$nor']);
         $this->assertArrayHasKey('document.refId', $finalQuery['$or'][0]);
         $this->assertArrayHasKey('document.appId', $finalQuery['$or'][0]);
         $this->assertArrayHasKey('spam', $finalQuery['$or'][0]);
@@ -183,6 +215,24 @@ class LargeOrTest extends TestCase
         $this->assertArrayHasKey('source', $finalQuery['$or'][2]);
         $this->assertArrayHasKey('encrypted', $finalQuery['$or'][2]);
         $this->assertArrayHasKey('scanState', $finalQuery['$or'][2]);
+
+        $this->assertArrayHasKey('price', $finalQuery['$nor'][0]);
+        $this->assertArrayHasKey('$ne', $finalQuery['$nor'][0]['price']);
+        $this->assertArrayHasKey('$exists', $finalQuery['$nor'][0]['price']);
+        $this->assertArrayHasKey('$eq', $finalQuery['$nor'][0]['price']);
+        $this->assertEquals(0.0, $finalQuery['$nor'][0]['price']['$ne']);
+        $this->assertTrue($finalQuery['$nor'][0]['price']['$exists']);
+        $this->assertFalse($finalQuery['$nor'][0]['price']['$eq']);
+
+        $this->assertArrayHasKey('cancelled', $finalQuery['$nor'][1]);
+        $this->assertArrayHasKey('refunded', $finalQuery['$nor'][1]);
+        $this->assertArrayHasKey('deleted', $finalQuery['$nor'][1]);
+        $this->assertArrayHasKey('$eq', $finalQuery['$nor'][1]['cancelled']);
+        $this->assertArrayHasKey('$eq', $finalQuery['$nor'][1]['refunded']);
+        $this->assertArrayHasKey('$eq', $finalQuery['$nor'][1]['deleted']);
+        $this->assertTrue($finalQuery['$nor'][1]['cancelled']['$eq']);
+        $this->assertTrue($finalQuery['$nor'][1]['refunded']['$eq']);
+        $this->assertTrue($finalQuery['$nor'][1]['deleted']['$eq']);
 
         $dtNewestOne = $finalQuery['$or'][0]['cd']['$lte'];
         $dtOldestOne = $finalQuery['$or'][0]['cd']['$gte'];

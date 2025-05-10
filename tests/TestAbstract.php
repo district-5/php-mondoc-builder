@@ -28,22 +28,17 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\MondocBuilder\QueryTypes;
+namespace District5Tests\MondocBuilderTests;
 
-use District5\MondocBuilder\QueryTypes\Abstracts\AbstractOrNorAll;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class OrOperator.
+ * Class TestAbstract
  *
- * @package District5\MondocBuilder\QueryTypes
+ * @package District5\MondocBuilderTests
+ *
+ * @internal
  */
-class OrOperator extends AbstractOrNorAll
+abstract class TestAbstract extends TestCase
 {
-    /**
-     * @return string
-     */
-    protected function getOperator(): string
-    {
-        return '$or';
-    }
 }

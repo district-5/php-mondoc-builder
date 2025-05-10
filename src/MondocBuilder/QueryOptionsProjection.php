@@ -30,6 +30,8 @@
 
 namespace District5\MondocBuilder;
 
+use District5\MondocBuilder\Exception\MondocBuilderInvalidParamException;
+
 /**
  * Class QueryOptionsProjection.
  *
@@ -54,6 +56,20 @@ class QueryOptionsProjection implements AbstractExportableArray
     }
 
     /**
+     * Get the value of a field in the projection
+     *
+     * @param string $field
+     * @return int|null
+     */
+    public function get(string $field): int|null
+    {
+        if (!array_key_exists($field, $this->fields)) {
+            return null;
+        }
+        return $this->fields[$field];
+    }
+
+    /**
      * Are there any fields in the projection?
      *
      * @return bool
@@ -67,11 +83,19 @@ class QueryOptionsProjection implements AbstractExportableArray
      * Add a field to the projection
      *
      * @param string $field The field to check
-     * @param int $included 1 for included, 0 for excluded
+     * @param bool|int $included true/1 for included, 0/false for excluded
      * @return static
      */
-    public function add(string $field, int $included): static
+    public function add(string $field, bool|int $included = true): static
     {
+        if (is_bool($included)) {
+            $included = (int)$included;
+        }
+        if ($included !== 0 && $included !== 1) {
+            throw new MondocBuilderInvalidParamException(
+                'Projection value must be either true, false, 1 or 0.'
+            );
+        }
         $this->fields[$field] = $included;
         return $this;
     }

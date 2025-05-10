@@ -28,22 +28,52 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\MondocBuilder\QueryTypes;
+namespace District5Tests\MondocBuilderTests\QueryTypesTests;
 
-use District5\MondocBuilder\QueryTypes\Abstracts\AbstractOrNorAll;
+use District5\MondocBuilder\QueryBuilder;
+use District5\MondocBuilder\QueryTypes\SizeOfValue;
+use District5Tests\MondocBuilderTests\TestQueryTypeAbstract;
 
 /**
- * Class OrOperator.
+ * Class SizeOfValueTest
  *
- * @package District5\MondocBuilder\QueryTypes
+ * @package District5\MondocBuilderTests
+ *
+ * @internal
  */
-class OrOperator extends AbstractOrNorAll
+class SizeOfValueTest extends TestQueryTypeAbstract
 {
-    /**
-     * @return string
-     */
-    protected function getOperator(): string
+    public function testQueryType()
     {
-        return '$or';
+        $query = SizeOfValue::get()->equals(
+            'k',
+            4
+        );
+        $this->assertEquals(
+            [
+                'k' => [
+                    '$size' => 4,
+                ],
+            ],
+            $query->getArrayCopy()
+        );
+    }
+
+    public function testQueryTypeWithBuilder()
+    {
+        $builder = QueryBuilder::get();
+        $query = SizeOfValue::get()->equals(
+            'k',
+            4
+        );
+        $builder->addQueryPart($query);
+        $this->assertEquals(
+            [
+                'k' => [
+                    '$size' => 4,
+                ],
+            ],
+            $builder->getArrayCopy()
+        );
     }
 }

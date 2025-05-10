@@ -85,6 +85,18 @@ class QueryOptions implements AbstractExportableArray
     }
 
     /**
+     * @param QueryOptionsProjection $projection
+     *
+     * @return QueryOptions
+     */
+    public function setProjection(QueryOptionsProjection $projection): QueryOptions
+    {
+        $this->projection = $projection;
+
+        return $this;
+    }
+
+    /**
      * @param null|int $skip
      *
      * @return QueryOptions
@@ -177,5 +189,13 @@ class QueryOptions implements AbstractExportableArray
         }
 
         return $opts;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasProjection(): bool
+    {
+        return $this->projection !== null && !$this->projection->isEmpty();
     }
 }

@@ -32,6 +32,7 @@ namespace District5\MondocBuilder\QueryTypes\Abstracts;
 
 use DateTime;
 use District5\Date\Date;
+use District5\MondocBuilder\Exception\MondocBuilderInvalidTypeException;
 use MongoDB\BSON\Binary;
 use MongoDB\BSON\Decimal128;
 use MongoDB\BSON\Javascript;
@@ -41,7 +42,6 @@ use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\Regex;
 use MongoDB\BSON\Timestamp;
 use MongoDB\BSON\UTCDateTime;
-use UnexpectedValueException;
 
 /**
  * Class AbstractValueEqualityParts.
@@ -57,6 +57,14 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
     protected const TYPE_NULL = 4;
     protected const TYPE_BUILTIN = 5;
     protected const TYPE_DATETIME = 6;
+
+    protected const SUPPORTED_NORMAL_TYPES = [
+        self::TYPE_STRING,
+        self::TYPE_INTEGER,
+        self::TYPE_FLOAT,
+        self::TYPE_BOOLEAN,
+        self::TYPE_NULL
+    ];
 
     /**
      * Add a string value into this equality filter.
@@ -201,16 +209,12 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
         $base = [];
         /** @noinspection PhpUnusedLocalVariableInspection */
         foreach ($this->parts as $_ => $parts) {
-            // @var $parts array
-            if (empty($parts)) {
-                continue;
-            }
             $key = $parts[0];
             if (!array_key_exists($key, $base)) {
-                $base[$key] = $this->buildQueryParts($parts[1], $parts[2]);
-            } else {
-                $base[$key] = array_merge($base[$key], $this->buildQueryParts($parts[1], $parts[2]));
+                $base[$key] = [];
             }
+
+            $base[$key] = array_merge($base[$key], $this->buildQueryParts($parts[1], $parts[2]));
         }
 
         return $base;
@@ -233,6 +237,7 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
      * @param int $variableType
      *
      * @return array
+     * @throws MondocBuilderInvalidTypeException
      */
     protected function buildQueryParts(mixed $value, int $variableType): array
     {
@@ -240,11 +245,11 @@ abstract class AbstractValueEqualityParts extends AbstractQueryType
             return [$this->getOperator() => $value];
         } else if (self::TYPE_DATETIME === $variableType) {
             return [$this->getOperator() => Date::mongo()->convertTo($value)];
-        } else if (in_array($variableType, [self::TYPE_STRING, self::TYPE_INTEGER, self::TYPE_FLOAT, self::TYPE_BOOLEAN, self::TYPE_NULL])) {
+        } else if (in_array($variableType, self::SUPPORTED_NORMAL_TYPES, true)) {
             return [$this->getOperator() => $value];
         }
 
-        throw new UnexpectedValueException(
+        throw new MondocBuilderInvalidTypeException(
             sprintf('Invalid type passed in parts array, received: "%s".', $variableType)
         );
     }
