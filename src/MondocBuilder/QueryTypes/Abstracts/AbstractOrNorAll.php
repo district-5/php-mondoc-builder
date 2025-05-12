@@ -39,7 +39,6 @@ use District5\MondocBuilder\QueryBuilder;
  */
 abstract class AbstractOrNorAll extends AbstractQueryType
 {
-
     /**
      * @var QueryBuilder[]
      */
