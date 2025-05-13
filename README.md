@@ -1,7 +1,12 @@
-District5 - MondocBuilder
-======
+Mondoc Builder, by District5
+====
 
-![CI](https://github.com/district-5/php-mondoc-builder/actions/workflows/ci.yml/badge.svg?branch=master)
+[![CI](https://github.com/district-5/php-mondoc-builder/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/district-5/php-mondoc-builder/actions)
+[![Latest Stable Version](http://poser.pugx.org/district5/mondoc-builder/v)](https://packagist.org/packages/district5/mondoc-builder)
+[![PHP Version Require](http://poser.pugx.org/district5/mondoc-builder/require/php)](https://packagist.org/packages/district5/mondoc-builder)
+[![Codecov](https://codecov.io/gh/district-5/php-mondoc-builder/branch/master/graph/badge.svg)](https://codecov.io/gh/district-5/php-mondoc-builder)
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdistrict-5%2Fphp-mondoc-builder.svg?type=small)](https://app.fossa.com/projects/git%2Bgithub.com%2Fdistrict-5%2Fphp-mondoc-builder?ref=badge_small)
 
 #### A MongoDB query building library.
 

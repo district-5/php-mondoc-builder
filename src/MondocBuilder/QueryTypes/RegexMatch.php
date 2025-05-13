@@ -33,36 +33,55 @@ namespace District5\MondocBuilder\QueryTypes;
 use District5\MondocBuilder\QueryTypes\Abstracts\AbstractQueryType;
 
 /**
- * Class SizeOfValue.
+ * Class RegexMatch.
  *
  * @package District5\MondocBuilder\QueryTypes
  */
-class SizeOfValue extends AbstractQueryType
+class RegexMatch extends AbstractQueryType
 {
     /**
-     * Adds a '$size' check to a query.
+     * @var string
+     */
+    protected string $key;
+
+    /**
+     * @var string
+     */
+    protected string $regex;
+
+    /**
+     * @var string
+     */
+    protected string $flags;
+
+    /**
+     * RegexMatch constructor.
      *
      * @param string $key
-     * @param int $int
+     * @param string $regex
+     * @param string $flags [optional]
      *
-     * @return $this
+     * @return RegexMatch
      */
-    public function equals(string $key, int $int): SizeOfValue
+    public function regex(string $key, string $regex, string $flags = ''): RegexMatch
     {
-        $this->parts[$key] = $int;
+        $this->key = $key;
+        $this->regex = $regex;
+        $this->flags = $flags;
 
         return $this;
     }
 
     /**
-     * Get the array version of this query part.
-     *
-     * @return array
+     * @return array[]
      */
     public function getArrayCopy(): array
     {
-        return array_map(function ($size) {
-            return ['$size' => $size];
-        }, $this->parts);
+        return [
+            $this->key => [
+                '$regex' => $this->regex,
+                '$options' => $this->flags
+            ]
+        ];
     }
 }
