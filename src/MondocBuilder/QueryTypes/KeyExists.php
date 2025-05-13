@@ -72,11 +72,8 @@ class KeyExists extends AbstractQueryType
      */
     public function getArrayCopy(): array
     {
-        $base = [];
-        foreach ($this->parts as $key => $size) {
-            $base[$key] = ['$exists' => $size];
-        }
-
-        return $base;
+        return array_map(function ($size) {
+            return ['$exists' => $size];
+        }, $this->parts);
     }
 }

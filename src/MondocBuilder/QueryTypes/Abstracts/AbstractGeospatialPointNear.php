@@ -92,9 +92,8 @@ abstract class AbstractGeospatialPointNear extends AbstractQueryType
      */
     public function getArrayCopy(): array
     {
-        $base = [];
-        foreach ($this->parts as $key => $data) {
-            $base[$key] = [
+        return array_map(function ($data) {
+            return [
                 $this->getOperator() => [
                     '$geometry' => [
                         'type' => 'Point',
@@ -103,9 +102,7 @@ abstract class AbstractGeospatialPointNear extends AbstractQueryType
                     '$maxDistance' => $data[0],
                 ],
             ];
-        }
-
-        return $base;
+        }, $this->parts);
     }
 
     /**

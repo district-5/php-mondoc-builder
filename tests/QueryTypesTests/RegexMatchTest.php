@@ -28,41 +28,57 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\MondocBuilder\QueryTypes;
+namespace District5Tests\MondocBuilderTests\QueryTypesTests;
 
-use District5\MondocBuilder\QueryTypes\Abstracts\AbstractQueryType;
+use District5\MondocBuilder\QueryBuilder;
+use District5\MondocBuilder\QueryTypes\RegexMatch;
+use District5\MondocBuilder\QueryTypes\ValueInValues;
+use District5Tests\MondocBuilderTests\TestQueryTypeAbstract;
 
 /**
- * Class SizeOfValue.
+ * Class RegexMatchTest
  *
- * @package District5\MondocBuilder\QueryTypes
+ * @package District5\MondocBuilderTests
+ *
+ * @internal
  */
-class SizeOfValue extends AbstractQueryType
+class RegexMatchTest extends TestQueryTypeAbstract
 {
-    /**
-     * Adds a '$size' check to a query.
-     *
-     * @param string $key
-     * @param int $int
-     *
-     * @return $this
-     */
-    public function equals(string $key, int $int): SizeOfValue
+    public function testQueryType()
     {
-        $this->parts[$key] = $int;
-
-        return $this;
+        $query = RegexMatch::get()->regex(
+            'fruit',
+            '^Apple',
+            '' // default is ''
+        );
+        $this->assertEquals(
+            [
+                'fruit' => [
+                    '$regex' => '^Apple',
+                    '$options' => '',
+                ],
+            ],
+            $query->getArrayCopy()
+        );
     }
 
-    /**
-     * Get the array version of this query part.
-     *
-     * @return array
-     */
-    public function getArrayCopy(): array
+    public function testQueryTypeWithBuilder()
     {
-        return array_map(function ($size) {
-            return ['$size' => $size];
-        }, $this->parts);
+        $builder = QueryBuilder::get();
+        $query = RegexMatch::get()->regex(
+            'fruit',
+            '^Apple',
+            '' // default is ''
+        );
+        $builder->addQueryPart($query);
+        $this->assertEquals(
+            [
+                'fruit' => [
+                    '$regex' => '^Apple',
+                    '$options' => '',
+                ],
+            ],
+            $builder->getArrayCopy()
+        );
     }
 }

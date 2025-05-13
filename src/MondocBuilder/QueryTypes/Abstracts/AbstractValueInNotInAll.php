@@ -59,12 +59,9 @@ abstract class AbstractValueInNotInAll extends AbstractQueryType
      */
     public function getArrayCopy(): array
     {
-        $base = [];
-        foreach ($this->parts as $key => $parts) {
-            $base[$key] = [$this->getOperator() => $parts];
-        }
-
-        return $base;
+        return array_map(function ($parts) {
+            return [$this->getOperator() => $parts];
+        }, $this->parts);
     }
 
     /**

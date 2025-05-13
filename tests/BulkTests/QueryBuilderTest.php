@@ -40,6 +40,7 @@ use District5\MondocBuilder\QueryTypes\GeospatialPointNearSphere;
 use District5\MondocBuilder\QueryTypes\HasAllValues;
 use District5\MondocBuilder\QueryTypes\KeyExists;
 use District5\MondocBuilder\QueryTypes\OrOperator;
+use District5\MondocBuilder\QueryTypes\RegexMatch;
 use District5\MondocBuilder\QueryTypes\SizeOfValue;
 use District5\MondocBuilder\QueryTypes\ValueEqualTo;
 use District5\MondocBuilder\QueryTypes\ValueGreaterThan;
@@ -110,6 +111,13 @@ class QueryBuilderTest extends TestCase
         $all->anArray('numbers', [1, 2, 3]);
         $builder->addQueryPart($all);
 
+        $regex = RegexMatch::get()->regex(
+            'preferredLanguage',
+            '^en',
+            'i' // default is ''
+        );
+        $builder->addQueryPart($regex);
+
         $size = new SizeOfValue();
         $size->equals('numbers', 3);
         $builder->addQueryPart($size);
@@ -158,6 +166,12 @@ class QueryBuilderTest extends TestCase
         $this->assertArrayHasKey('$size', $query['numbers']);
         $this->assertCount(3, $query['numbers']['$all']);
         $this->assertEquals(3, $query['numbers']['$size']);
+
+        $this->assertArrayHasKey('preferredLanguage', $query);
+        $this->assertArrayHasKey('$regex', $query['preferredLanguage']);
+        $this->assertArrayHasKey('$options', $query['preferredLanguage']);
+        $this->assertEquals('^en', $query['preferredLanguage']['$regex']);
+        $this->assertEquals('i', $query['preferredLanguage']['$options']);
 
         $this->assertArrayHasKey('$eq', $query['firstName']);
         $this->assertArrayHasKey('$ne', $query['lastName']);
