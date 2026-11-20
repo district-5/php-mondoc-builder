@@ -65,8 +65,6 @@ class QueryPartTest extends TestCase
         // Create a new instance of the class
         $instance = $reflectionClass->newInstance();
         $reflectionMethod = $reflectionClass->getMethod('buildQueryParts');
-        /** @noinspection PhpExpressionResultUnusedInspection */
-        $reflectionMethod->setAccessible(true);
         $reflectionMethod->invoke($instance, 'intKey', 999); // This will throw an exception as 999 is not a valid type
     }
 }
